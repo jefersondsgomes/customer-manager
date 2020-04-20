@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace ClientManager.Model.Common
 {
     public class Client
     {
+        [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
         public string Name { get; set; }
         public string RG { get; set; }
