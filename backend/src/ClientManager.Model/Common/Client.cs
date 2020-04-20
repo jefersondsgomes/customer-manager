@@ -1,14 +1,12 @@
 using System;
 using System.Collections.Generic;
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
+using ClientManager.Repository;
 
 namespace ClientManager.Model.Common
 {
-    public class Client
-    {
-        [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; }
+    [BsonCollection("client")]
+    public class Client : Document
+    {            
         public string Name { get; set; }
         public string RG { get; set; }
         public string CPF { get; set; }

@@ -1,13 +1,11 @@
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
+using ClientManager.Repository;
 
 namespace ClientManager.Model.User
 {
-    public class User
+    [BsonCollection("user")]
+    public class User : Document
     {
-        [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; }        
         public string Login { get; set; }
-        public string Password{ get; set; }        
+        public string Password { get; set; }
     }
 }
