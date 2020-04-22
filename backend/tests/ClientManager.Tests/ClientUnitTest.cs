@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using ClientManager.Model.Common;
@@ -23,6 +24,8 @@ namespace ClientManager.Tests
             _service = new ClientService(_repository);
         }
 
+
+        #region CREATE
         [Fact]
         public async Task TestCreateShouldReturnSuccessWhenExecutionIsOk()
         {
@@ -43,7 +46,7 @@ namespace ClientManager.Tests
 
             Assert.Equal(expected.StatusCode, result.StatusCode);
             Assert.Equal(expected.Error.Message, result.Error.Message);
-        }
+        }        
 
         [Fact]
         public async Task TestCreateShouldReturnErrorResultWhenCannotCreate()
@@ -56,9 +59,93 @@ namespace ClientManager.Tests
             Assert.Equal(expected.StatusCode, result.StatusCode);
             Assert.Equal(expected.Error.Message, result.Error.Message);
         }
+        #endregion
+
+        #region READ
+        
+        [Fact]
+        public async Task TestGetShouldReturnErrorResultWhenIdParameterIsNull()
+        {
+            var expected = new Result<Client>(null, HttpStatusCode.BadRequest, 
+                new ArgumentNullException("Parameter ID cannot be null or empty!"));
+
+            var result = await _service.Get(null);
+
+            Assert.Equal(expected.StatusCode, result.StatusCode);
+            Assert.Equal(expected.Error.Message, result.Error.Message);            
+        }
 
         [Fact]
-        public async Task TestDeleteSholdReturnFalseWhenIdIsNullOrEmpty()
+        public async Task TestGetShouldReturnErrorResultWhenExecutionIsNotOk()
+        {
+            var expected = new Result<Client>(null, 
+                HttpStatusCode.InternalServerError, new Exception("An error occurred while trying to get the client!"));
+
+            _repository.FindAsync(Arg.Any<string>()).Throws(new Exception());
+            var result = await _service.Get(Guid.NewGuid().ToString());
+
+            Assert.Equal(expected.StatusCode, result.StatusCode);
+            Assert.Equal(expected.Error.Message, result.Error.Message);            
+        }
+
+        [Fact]
+        public async Task TestGetShouldReturnErrorResultWhenClientNotFound()
+        {
+            var expected = new Result<Client>(null, 
+                HttpStatusCode.NotFound, new Exception("Client not found!"));
+
+            _repository.FindAsync(Arg.Any<string>()).Returns((Client)null);
+            var result = await _service.Get(Guid.NewGuid().ToString());
+
+            Assert.Equal(expected.StatusCode, result.StatusCode);
+            Assert.Equal(expected.Error.Message, result.Error.Message);            
+        }
+
+        [Fact]
+        public async Task TestGetShouldReturnSuccessResultWhenClientExists()
+        {
+            var client = new Client();
+            var expected = new Result<Client>(client, HttpStatusCode.OK);
+
+            _repository.FindAsync(Arg.Any<string>()).Returns(client);
+            var result = await _service.Get(Guid.NewGuid().ToString());
+
+            Assert.Equal(expected.StatusCode, result.StatusCode);
+            Assert.Equal(expected.Value, result.Value);
+        }
+
+        #endregion
+        
+        #region UPDATE
+
+        [Fact]
+        public async Task TestUpdateShouldReturnErrorResultWhenIdIsNull()
+        {
+            var expected = new Result<Client>(new Client(), HttpStatusCode.BadRequest, new ArgumentNullException("Parameter ID cannot be null or empty!"));
+
+            var result = await _service.Update(null, new Client());
+
+            Assert.Equal(expected.StatusCode, result.StatusCode);
+            Assert.Equal(expected.Error.Message, result.Error.Message);
+        }
+
+        [Fact]
+        public async Task TestUpdateShouldReturnErrorResultWhenClientIsNull()
+        {
+            var expected = new Result<Client>(null, HttpStatusCode.BadRequest, new ArgumentNullException("Client cannot be null!"));
+
+            var result = await _service.Update(Guid.NewGuid().ToString(), null);
+
+            Assert.Equal(expected.StatusCode, result.StatusCode);
+            Assert.Equal(expected.Error.Message, result.Error.Message);
+        }
+
+
+        #endregion
+
+        # region DELETE
+        [Fact]
+        public async Task TestDeleteSholdReturnFalseResultWhenIdIsNull()
         {
             string id = null;
             var expected = new Result<bool>(false, HttpStatusCode.BadRequest, new ArgumentNullException("Parameter ID cannot be null!"));
@@ -71,7 +158,7 @@ namespace ClientManager.Tests
         }
 
         [Fact]
-        public async Task TestDeleteSholdReturnTrueWhenIdIsOk()
+        public async Task TestDeleteSholdReturnTrueResulteWhenExecutionIsOk()
         {
             var expected = new Result<bool>(true, HttpStatusCode.NoContent);
 
@@ -95,5 +182,6 @@ namespace ClientManager.Tests
             Assert.Equal(expected.StatusCode, result.StatusCode);
             Assert.Equal(expected.Error.Message, result.Error.Message);
         }
+        #endregion
     }
 }

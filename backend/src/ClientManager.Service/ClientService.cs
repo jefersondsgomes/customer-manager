@@ -58,7 +58,22 @@ namespace ClientManager.Service
 
         public async Task<Result<Client>> Get(string id)
         {
-            throw new System.NotImplementedException();
+            if(string.IsNullOrWhiteSpace(id))
+                return new Result<Client>(null, HttpStatusCode.BadRequest, new ArgumentNullException("Parameter ID cannot be null or empty!"));
+
+            try
+            {
+                var client = await _repository.FindAsync(id);
+
+                return client != null ? 
+                    new Result<Client>(client, HttpStatusCode.OK) :
+                    new Result<Client>(null, HttpStatusCode.NotFound, new Exception("Client not found!"));
+            }
+            catch(Exception)
+            {
+                return new Result<Client>(null, HttpStatusCode.InternalServerError, 
+                    new Exception("An error occurred while trying to get the client!"));
+            }
         }
 
         public async Task<List<Result<Client>>> Get()
@@ -68,6 +83,12 @@ namespace ClientManager.Service
 
         public async Task<Result<Client>> Update(string id, Client client)
         {
+            if(string.IsNullOrWhiteSpace(id))
+                return new Result<Client>(client, HttpStatusCode.BadRequest, new ArgumentNullException("Parameter ID cannot be null or empty!"));
+
+            if(client == null)
+                return new Result<Client>(null, HttpStatusCode.BadRequest, new ArgumentNullException("Client cannot be null!"));
+            
             throw new System.NotImplementedException();
         }
     }
