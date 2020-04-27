@@ -58,20 +58,20 @@ namespace ClientManager.Service
 
         public async Task<Result<Client>> Get(string id)
         {
-            if(string.IsNullOrWhiteSpace(id))
+            if (string.IsNullOrWhiteSpace(id))
                 return new Result<Client>(null, HttpStatusCode.BadRequest, new ArgumentNullException("Parameter ID cannot be null or empty!"));
 
             try
             {
                 var client = await _repository.FindAsync(id);
 
-                return client != null ? 
+                return client != null ?
                     new Result<Client>(client, HttpStatusCode.OK) :
                     new Result<Client>(null, HttpStatusCode.NotFound, new Exception("Client not found!"));
             }
-            catch(Exception)
+            catch (Exception)
             {
-                return new Result<Client>(null, HttpStatusCode.InternalServerError, 
+                return new Result<Client>(null, HttpStatusCode.InternalServerError,
                     new Exception("An error occurred while trying to get the client!"));
             }
         }
@@ -83,13 +83,28 @@ namespace ClientManager.Service
 
         public async Task<Result<Client>> Update(string id, Client client)
         {
-            if(string.IsNullOrWhiteSpace(id))
-                return new Result<Client>(client, HttpStatusCode.BadRequest, new ArgumentNullException("Parameter ID cannot be null or empty!"));
+            if (string.IsNullOrWhiteSpace(id))
+                return new Result<Client>(client, HttpStatusCode.BadRequest,
+                new ArgumentNullException("Parameter ID cannot be null or empty!"));
 
-            if(client == null)
-                return new Result<Client>(null, HttpStatusCode.BadRequest, new ArgumentNullException("Client cannot be null!"));
-            
-            throw new System.NotImplementedException();
+            if (client == null)
+                return new Result<Client>(null, HttpStatusCode.BadRequest,
+                new ArgumentNullException("Client cannot be null!"));
+
+            try
+            {
+                if (await _repository.FindAsync(id) == null)
+                    return new Result<Client>(null, HttpStatusCode.BadRequest,
+                    new Exception("The client to be updated does not exists in database!"));
+
+                await _repository.ReplaceAsync(id, client);
+                return new Result<Client>(new Client(), HttpStatusCode.OK);
+            }
+            catch (Exception)
+            {
+                return new Result<Client>(client, HttpStatusCode.InternalServerError,
+                new Exception("Could not be update the client!"));
+            }
         }
     }
 }

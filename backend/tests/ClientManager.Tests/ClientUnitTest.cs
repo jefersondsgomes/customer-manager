@@ -140,6 +140,46 @@ namespace ClientManager.Tests
             Assert.Equal(expected.Error.Message, result.Error.Message);
         }
 
+        [Fact]
+        public async Task TestUpdateShouldReturnErrorResultWhenClientDoesNotExistsInDatabase()
+        {
+            Client nullClient = null;
+            var expected = new Result<Client>(null, HttpStatusCode.BadRequest, new Exception("The client to be updated does not exists in database!"));
+
+            _repository.FindAsync(Arg.Any<string>()).Returns(nullClient);
+            var result = await _service.Update(Guid.NewGuid().ToString(), new Client());
+
+            Assert.Equal(expected.StatusCode, result.StatusCode);
+            Assert.Equal(expected.Error.Message, result.Error.Message);
+        }
+
+        [Fact]
+        public async Task TestUpdateShouldReturnErrorResultWhenExceptionsWasThrowedInExecution()
+        {
+            var expected = new Result<Client>(new Client(), HttpStatusCode.InternalServerError, new Exception("Could not be update the client!"));
+            
+            _repository.FindAsync(Arg.Any<string>()).Returns(new Client());
+            _repository.ReplaceAsync(Arg.Any<string>(), Arg.Any<Client>()).Throws(new Exception());
+            
+            var result = await _service.Update(Guid.NewGuid().ToString(), new Client());
+
+            Assert.Equal(expected.StatusCode, result.StatusCode);
+            Assert.Equal(expected.Error.Message, result.Error.Message);
+        }
+
+        [Fact]
+        public async Task TestUpdateShouldReturnSuccessResultWhenExecutionIsOk()
+        {
+            var expected = new Result<Client>(new Client(), HttpStatusCode.OK);
+            
+            _repository.FindAsync(Arg.Any<string>()).Returns(new Client());
+            _repository.ReplaceAsync(Arg.Any<string>(), Arg.Any<Client>()).Returns(new Client());
+            
+            var result = await _service.Update(Guid.NewGuid().ToString(), new Client());
+
+            Assert.Equal(expected.StatusCode, result.StatusCode);
+        }
+
 
         #endregion
 
