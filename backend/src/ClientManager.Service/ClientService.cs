@@ -98,7 +98,7 @@ namespace ClientManager.Service
                     new Exception("The client to be updated does not exists in database!"));
 
                 await _repository.ReplaceAsync(id, client);
-                return new Result<Client>(new Client(), HttpStatusCode.OK);
+                return new Result<Client>(client, HttpStatusCode.OK);
             }
             catch (Exception)
             {
