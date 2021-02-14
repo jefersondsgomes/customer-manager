@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientManager.Repository", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientManager.Service", "src\ClientManager.Service\ClientManager.Service.csproj", "{060FAA47-2D7F-41D7-8B49-7A27D24E74C1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientManager.Tests", "tests\ClientManager.Tests\ClientManager.Tests.csproj", "{F88A0483-8CDC-4896-B687-D195B45F134B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientManager.Test", "tests\ClientManager.Tests\ClientManager.Test.csproj", "{F88A0483-8CDC-4896-B687-D195B45F134B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

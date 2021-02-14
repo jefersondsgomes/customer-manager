@@ -1,11 +1,11 @@
-using System.Threading.Tasks;
+using ClientManager.Model.Common;
 using ClientManager.Model.Result;
-using ClientManager.Model.User;
+using System.Threading.Tasks;
 
 namespace ClientManager.Service.Interfaces
 {
     public interface IUserService
     {
-        Task<Result<bool>> ValidadeUser(User user);         
+        Task<Result<bool>> Validate(User user);
     }
 }

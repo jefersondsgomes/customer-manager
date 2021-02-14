@@ -1,72 +1,73 @@
-using System;
-using System.Net;
-using System.Threading.Tasks;
-using ClientManager.Model.Result;
-using ClientManager.Model.User;
+using ClientManager.Model.Common;
 using ClientManager.Repository.Interfaces;
 using ClientManager.Service;
 using ClientManager.Service.Interfaces;
 using MongoDB.Driver;
 using NSubstitute;
+using NSubstitute.ExceptionExtensions;
+using System;
+using System.Net;
+using System.Threading.Tasks;
 using Xunit;
 
-namespace ClientManager.Tests
+namespace ClientManager.Test
 {
     public class UserUnitTest
     {
-        private readonly IMongoRepository<User> _repository;
-        private readonly IUserService _service;
+        private readonly IMongoRepository<User> _userRepository;
+        private readonly IUserService _userService;
 
         public UserUnitTest()
         {
-            _repository = Substitute.For<IMongoRepository<User>>(); 
-            _service = new UserService(_repository);
+            _userRepository = Substitute.For<IMongoRepository<User>>();
+            _userService = new UserService(_userRepository);
         }
 
-        #region Setup
-        private static User NullUser() => null;
-        private static User InvalidUser() => new User() {Login = "Any", Password = "Any"};
-        private static User ValidUser() => new User() {Login = "Ok", Password = "Ok"};
-        #endregion
+        #region VALIDATE
 
         [Fact]
-        public async Task TestValidateUserShouldReturnFalseWhenUserIsNull()
+        public async Task TestValidateShouldReturnFalseWhenUserIsNull()
         {
-            User user = NullUser();
-            var expected = new Result<bool>(false, HttpStatusCode.NotFound, new ArgumentNullException("User cannot be null!"));
-
-            var result = await _service.ValidadeUser(user);
-
-            Assert.Equal(expected.Value, result.Value);
-            Assert.Equal(expected.StatusCode, result.StatusCode);
-            Assert.Equal(expected.Error.Message, result.Error.Message);
+            var result = await _userService.Validate(null);
+            Assert.False(result.Value);
+            Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
+            Assert.NotNull(result.Error);
+            Assert.IsType<ArgumentNullException>(result.Error);
+            Assert.Contains("user cannot be null!", result.Error.Message);
         }
 
         [Fact]
-        public async Task TestValidateUserShouldReturnFalseWhenDoesNotExists()
+        public async Task TestValidateShouldReturnFalseWhenExecutionFail()
         {
-            User user = InvalidUser();            
-            var expected = new Result<bool>(false, HttpStatusCode.NotFound, new Exception("Invalid User or Password!"));
-            
-            _repository.FindAsync(Arg.Any<FilterDefinition<User>>()).Returns<User>(NullUser());
-            var result = await _service.ValidadeUser(user);
-
-            Assert.Equal(expected.Value, result.Value);
-            Assert.Equal(expected.StatusCode, result.StatusCode);
-            Assert.Equal(expected.Error.Message, result.Error.Message);
+            _userRepository.FindAsync(Arg.Any<FilterDefinition<User>>()).Throws(new Exception());
+            var result = await _userService.Validate(Mock.User.Failed);
+            Assert.False(result.Value);
+            Assert.Equal(HttpStatusCode.InternalServerError, result.StatusCode);
+            Assert.NotNull(result.Error);
+            Assert.Contains("could not validate user:", result.Error.Message);
         }
 
         [Fact]
-        public async Task TestValidateUserShouldReturnTrueWhenUserExists()
+        public async Task TestValidateShouldReturnFalseWhenUserNotFound()
         {
-            User user = ValidUser();                   
-            var expected = new Result<bool>(true, HttpStatusCode.OK);
-
-            _repository.FindAsync(Arg.Any<FilterDefinition<User>>()).Returns<User>(user);
-            var result = await _service.ValidadeUser(user);
-
-            Assert.Equal(expected.Value, result.Value);
-            Assert.Equal(expected.StatusCode, result.StatusCode);
+            _userRepository.FindAsync(Arg.Any<FilterDefinition<User>>()).Returns(Task.FromResult(Mock.User.Null));
+            var result = await _userService.Validate(Mock.User.Invalid);
+            Assert.False(result.Value);
+            Assert.Equal(HttpStatusCode.NotFound, result.StatusCode);
+            Assert.NotNull(result.Error);
+            Assert.Contains("invalid user!", result.Error.Message);
         }
+
+        [Fact]
+        public async Task TestValidateUserShouldReturnTrueWhenOk()
+        {
+            _userRepository.FindAsync(Arg.Any<FilterDefinition<User>>()).Returns(Task.FromResult(Mock.User.Success));
+            var result = await _userService.Validate(Mock.User.Success);
+            Assert.True(result.Value);
+            Assert.Equal(HttpStatusCode.OK, result.StatusCode);
+            Assert.Null(result.Error);
+        }
+
+        #endregion        
     }
 }
