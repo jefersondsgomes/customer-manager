@@ -14,7 +14,7 @@ namespace ClientManager.Model.Result
             Error = error;
         }
     }
-    
+
     public class Result<T> : Result
     {
         public T Value { get; set; }

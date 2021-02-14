@@ -1,6 +1,6 @@
+using MongoDB.Driver;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using MongoDB.Driver;
 
 namespace ClientManager.Repository.Interfaces
 {
