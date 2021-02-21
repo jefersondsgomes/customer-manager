@@ -1,3 +1,7 @@
+using CustomerManager.Repository;
+using CustomerManager.Repository.Interfaces;
+using CustomerManager.Service;
+using CustomerManager.Service.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -8,20 +12,25 @@ namespace CustomerManager.Api
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
+        private readonly IMongoSettings _mongoSettings;
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            _mongoSettings = Configuration.GetSection(nameof(MongoSettings)).Get<MongoSettings>();
         }
 
-        public IConfiguration Configuration { get; }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services
+                .AddSingleton(_mongoSettings)
+                .AddSingleton(typeof(IMongoRepository<>), typeof(MongoRepository<>))
+                .AddScoped<ICustomerService, CustomerService>()
+                .AddScoped<IUserService, UserService>()
+                .AddControllers();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -30,15 +39,9 @@ namespace CustomerManager.Api
             }
 
             app.UseHttpsRedirection();
-
             app.UseRouting();
-
             app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseEndpoints(endpoints => endpoints.MapControllers());
         }
     }
 }

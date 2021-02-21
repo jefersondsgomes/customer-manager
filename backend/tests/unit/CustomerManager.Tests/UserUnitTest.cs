@@ -23,12 +23,10 @@ namespace CustomerManager.Test
             _userService = new UserService(_userRepository);
         }
 
-        #region VALIDATE
-
         [Fact]
         public async Task TestValidateShouldReturnFalseWhenUserIsNull()
         {
-            var result = await _userService.Validate(null);
+            var result = await _userService.Authenticate(null);
             Assert.False(result.Value);
             Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
             Assert.NotNull(result.Error);
@@ -37,21 +35,21 @@ namespace CustomerManager.Test
         }
 
         [Fact]
-        public async Task TestValidateShouldReturnFalseWhenExecutionFail()
+        public async Task TestAuthenticateShouldReturnFalseWhenExecutionFail()
         {
             _userRepository.FindAsync(Arg.Any<FilterDefinition<User>>()).Throws(new Exception());
-            var result = await _userService.Validate(Mock.User.Failed);
+            var result = await _userService.Authenticate(Mock.User.Failed);
             Assert.False(result.Value);
             Assert.Equal(HttpStatusCode.InternalServerError, result.StatusCode);
             Assert.NotNull(result.Error);
-            Assert.Contains("could not validate user:", result.Error.Message);
+            Assert.Contains("could not authenticate user:", result.Error.Message);
         }
 
         [Fact]
-        public async Task TestValidateShouldReturnFalseWhenUserNotFound()
+        public async Task TestAuthenticateShouldReturnFalseWhenUserNotFound()
         {
             _userRepository.FindAsync(Arg.Any<FilterDefinition<User>>()).Returns(Task.FromResult(Mock.User.Null));
-            var result = await _userService.Validate(Mock.User.Invalid);
+            var result = await _userService.Authenticate(Mock.User.Invalid);
             Assert.False(result.Value);
             Assert.Equal(HttpStatusCode.NotFound, result.StatusCode);
             Assert.NotNull(result.Error);
@@ -59,15 +57,13 @@ namespace CustomerManager.Test
         }
 
         [Fact]
-        public async Task TestValidateUserShouldReturnTrueWhenOk()
+        public async Task TestAuthenticateUserShouldReturnTrueWhenOk()
         {
             _userRepository.FindAsync(Arg.Any<FilterDefinition<User>>()).Returns(Task.FromResult(Mock.User.Success));
-            var result = await _userService.Validate(Mock.User.Success);
+            var result = await _userService.Authenticate(Mock.User.Success);
             Assert.True(result.Value);
             Assert.Equal(HttpStatusCode.OK, result.StatusCode);
             Assert.Null(result.Error);
         }
-
-        #endregion        
     }
 }

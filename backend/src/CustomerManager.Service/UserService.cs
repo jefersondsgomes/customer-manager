@@ -18,7 +18,7 @@ namespace CustomerManager.Service
             _userRepository = repository;
         }
 
-        public async Task<Result<bool>> Validate(User user)
+        public async Task<Result<bool>> Authenticate(User user)
         {
             if (user == null)
                 return new Result<bool>(false, HttpStatusCode.BadRequest,
@@ -37,7 +37,7 @@ namespace CustomerManager.Service
             catch (Exception e)
             {
                 return new Result<bool>(false, HttpStatusCode.InternalServerError,
-                    new Exception($"could not validate user: {e.Message}"));
+                    new Exception($"could not authenticate user: {e.Message}"));
             }
         }
     }

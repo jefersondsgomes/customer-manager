@@ -1,6 +1,4 @@
-﻿using MongoDB.Bson;
-
-namespace CustomerManager.Test.Mock
+﻿namespace CustomerManager.Test.Mock
 {
     public static class User
     {
@@ -15,21 +13,21 @@ namespace CustomerManager.Test.Mock
 
             Failed = new Model.Common.User()
             {
-                Id = ObjectId.Parse("507f191e810c19729de860ea"),
+                Id = "507f191e810c19729de860ea",
                 Login = "Failed",
                 Password = "Failed"
             };
 
             Invalid = new Model.Common.User()
             {
-                Id = ObjectId.Parse("5099803df3f4948bd2f98391"),
+                Id = "5099803df3f4948bd2f98391",
                 Login = "Invalid",
                 Password = "Invalid"
             };
 
             Success = new Model.Common.User()
             {
-                Id = ObjectId.Parse("507f1f77bcf86cd799439011"),
+                Id = "507f1f77bcf86cd799439011",
                 Login = "Success",
                 Password = "Success"
             };

@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 
 namespace CustomerManager.Service.Interfaces
 {
-    public interface IClientService
+    public interface ICustomerService
     {
         Task<Result<Customer>> GetAsync(string id);
         Task<Result<ICollection<Customer>>> GetAllAsync();
-        Task<Result<Customer>> CreateAsync(Customer client);
-        Task<Result<Customer>> UpdateAsync(string id, Customer client);
+        Task<Result<Customer>> CreateAsync(Customer customer);
+        Task<Result<Customer>> UpdateAsync(string id, Customer customer);
         Task<Result<bool>> DeleteAsync(string id);
     }
 }
