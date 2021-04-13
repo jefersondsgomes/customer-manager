@@ -1,11 +1,13 @@
 ﻿using CustomerManager.Model.Common;
 using CustomerManager.Model.Result;
 using CustomerManager.Service.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace CustomerManager.Api.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("/api/[controller]")]
     public class CustomerController : ControllerBase
@@ -22,7 +24,7 @@ namespace CustomerManager.Api.Controllers
         {
             var customerResult = await _customerService.GetAsync(id);
             if (customerResult.Error != null)
-                return new ProblemDetailsResult(customerResult.StatusCode, Request, customerResult.Error.Message).GetObjectResult();
+                return new ProblemDetailsResult(customerResult.StatusCode, Request, customerResult.Error).GetObjectResult();
 
             return new OkObjectResult(customerResult.Value);
         }
@@ -33,7 +35,7 @@ namespace CustomerManager.Api.Controllers
         {
             var customersResult = await _customerService.GetAllAsync();
             if (customersResult.Error != null)
-                return new ProblemDetailsResult(customersResult.StatusCode, Request, customersResult.Error.Message).GetObjectResult();
+                return new ProblemDetailsResult(customersResult.StatusCode, Request, customersResult.Error).GetObjectResult();
 
             return new OkObjectResult(customersResult.Value);
         }
@@ -43,7 +45,7 @@ namespace CustomerManager.Api.Controllers
         {
             var customerResult = await _customerService.CreateAsync(customer);
             if (customerResult.Error != null)
-                return new ProblemDetailsResult(customerResult.StatusCode, Request, customerResult.Error.Message).GetObjectResult();
+                return new ProblemDetailsResult(customerResult.StatusCode, Request, customerResult.Error).GetObjectResult();
 
             return CreatedAtRoute(new { id = customer.Id }, customer);
         }
@@ -53,7 +55,7 @@ namespace CustomerManager.Api.Controllers
         {
             var customerResult = await _customerService.UpdateAsync(id, customer);
             if (customerResult.Error != null)
-                return new ProblemDetailsResult(customerResult.StatusCode, Request, customerResult.Error.Message).GetObjectResult();
+                return new ProblemDetailsResult(customerResult.StatusCode, Request, customerResult.Error).GetObjectResult();
 
             return NoContent();
         }
@@ -63,7 +65,7 @@ namespace CustomerManager.Api.Controllers
         {
             var customerResult = await _customerService.DeleteAsync(id);
             if (customerResult.Error != null)
-                return new ProblemDetailsResult(customerResult.StatusCode, Request, customerResult.Error.Message).GetObjectResult();
+                return new ProblemDetailsResult(customerResult.StatusCode, Request, customerResult.Error).GetObjectResult();
 
             return NoContent();
         }

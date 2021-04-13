@@ -5,6 +5,7 @@
         public static Model.Common.User Null;
         public static Model.Common.User Failed;
         public static Model.Common.User Invalid;
+        public static Model.Common.User Exists;
         public static Model.Common.User Success;
 
         static User()
@@ -23,6 +24,13 @@
                 Id = "5099803df3f4948bd2f98391",
                 Login = "Invalid",
                 Password = "Invalid"
+            };
+
+            Exists = new Model.Common.User()
+            {
+                Id = "5099223df433b948bd2e123153",
+                Login = "Exists",
+                Password = "Exists"
             };
 
             Success = new Model.Common.User()

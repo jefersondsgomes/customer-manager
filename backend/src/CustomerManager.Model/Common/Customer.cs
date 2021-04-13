@@ -9,7 +9,9 @@ namespace CustomerManager.Model.Common
     public class Customer : Document
     {
         public string Name { get; set; }
+        [BsonElement("rg")]
         public string RG { get; set; }
+        [BsonElement("cpf")]
         public string CPF { get; set; }
         public int Age { get; set; }
         public DateTime? BirthDate { get; set; }

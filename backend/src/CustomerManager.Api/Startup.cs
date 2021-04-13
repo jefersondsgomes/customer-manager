@@ -1,7 +1,9 @@
+using CustomerManager.Api.Helpers;
 using CustomerManager.Repository;
 using CustomerManager.Repository.Interfaces;
 using CustomerManager.Service;
 using CustomerManager.Service.Interfaces;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -29,6 +31,9 @@ namespace CustomerManager.Api
                 .AddScoped<ICustomerService, CustomerService>()
                 .AddScoped<IUserService, UserService>()
                 .AddControllers();
+
+            services.AddAuthentication("BasicAuthentication")
+                .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -40,6 +45,7 @@ namespace CustomerManager.Api
 
             app.UseHttpsRedirection();
             app.UseRouting();
+            app.UseAuthentication();
             app.UseAuthorization();
             app.UseEndpoints(endpoints => endpoints.MapControllers());
         }
