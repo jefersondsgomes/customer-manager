@@ -1,5 +1,4 @@
 ﻿using CustomerManager.Model.Common;
-using MongoDB.Bson;
 using System;
 using System.Collections.Generic;
 
@@ -17,7 +16,7 @@ namespace CustomerManager.Test.Mock
 
             Failed = new Model.Common.Customer()
             {
-                Id = ObjectId.Parse("507f191e810c19729de860ea"),
+                Id = "507f191e810c19729de860ea",
                 Name = "Error",
                 Age = 1,
                 BirthDate = DateTime.Now,
@@ -29,7 +28,7 @@ namespace CustomerManager.Test.Mock
 
             Success = new Model.Common.Customer()
             {
-                Id = ObjectId.Parse("507f1f77bcf86cd799439011"),
+                Id = "507f1f77bcf86cd799439011",
                 Name = "Success",
                 Age = 2,
                 BirthDate = DateTime.Now,

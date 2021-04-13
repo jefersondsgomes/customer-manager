@@ -1,12 +1,19 @@
 using CustomerManager.Repository.Interfaces;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using System;
 
 namespace CustomerManager.Repository
 {
     public abstract class Document : IDocument
     {
-        public ObjectId Id { get; set; }
-        public DateTime CreatedAt => Id.CreationTime;
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string Id { get; set; }
+        public DateTime Created { get; set; }
+
+        public Document()
+        {
+            Created = DateTime.Now;
+        }
     }
 }

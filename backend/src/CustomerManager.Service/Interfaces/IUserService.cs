@@ -6,6 +6,7 @@ namespace CustomerManager.Service.Interfaces
 {
     public interface IUserService
     {
-        Task<Result<bool>> Validate(User user);
+        Task<Result<bool>> AuthenticateAsync(User user);
+        Task<Result<User>> CreateAsync(User user);
     }
 }

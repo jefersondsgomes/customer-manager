@@ -2,7 +2,19 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <StartupObject>CustomerManager.Api.Program</StartupObject>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CustomerManager.Model\CustomerManager.Model.csproj" />
+    <ProjectReference Include="..\CustomerManager.Repository\CustomerManager.Repository.csproj" />
+    <ProjectReference Include="..\CustomerManager.Service\CustomerManager.Service.csproj" />
+  </ItemGroup>
 
 
 </Project>
