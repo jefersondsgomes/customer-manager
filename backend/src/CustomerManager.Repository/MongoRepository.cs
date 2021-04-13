@@ -1,5 +1,4 @@
 using CustomerManager.Repository.Interfaces;
-using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
@@ -17,9 +16,6 @@ namespace CustomerManager.Repository
 
         public MongoRepository(IMongoSettings settings)
         {
-            var convertionPack = new ConventionPack() { new CamelCaseElementNameConvention() };
-            ConventionRegistry.Register("camelCase", convertionPack, f => true);
-
             _client = new MongoClient(settings.ConnectionString);
             _database = _client.GetDatabase(settings.DatabaseName);
             _collection = _database.GetCollection<TDocument>(GetCollectionName(typeof(TDocument)));

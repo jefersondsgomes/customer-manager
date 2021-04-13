@@ -9,6 +9,8 @@ namespace CustomerManager.Repository
     {
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
+
+        [BsonElement("created")]
         public DateTime Created { get; set; }
 
         public Document()

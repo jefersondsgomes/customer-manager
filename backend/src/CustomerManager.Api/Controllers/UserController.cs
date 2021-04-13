@@ -20,6 +20,7 @@ namespace CustomerManager.Api.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> CreateAsync(User user)
         {
             var userResult = await _userService.CreateAsync(user);
