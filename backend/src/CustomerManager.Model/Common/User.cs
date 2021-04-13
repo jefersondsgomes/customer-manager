@@ -1,4 +1,5 @@
 using CustomerManager.Repository;
+using MongoDB.Bson.Serialization.Attributes;
 using System.ComponentModel.DataAnnotations;
 
 namespace CustomerManager.Model.Common
@@ -7,8 +8,15 @@ namespace CustomerManager.Model.Common
     public class User : Document
     {
         [Required]
-        public string Login { get; set; }
+        [BsonElement("name")]
+        public string Name { get; set; }
+
         [Required]
+        [BsonElement("login")]
+        public string Login { get; set; }
+
+        [Required]
+        [BsonElement("password")]
         public string Password { get; set; }
     }
 }
