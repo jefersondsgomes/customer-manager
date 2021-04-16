@@ -61,7 +61,7 @@ namespace CustomerManager.Test
             Assert.False(result.Value);
             Assert.Equal(HttpStatusCode.NotFound, result.StatusCode);
             Assert.NotNull(result.Error);
-            Assert.Contains("invalid user!", result.Error.Message);
+            Assert.Contains("invalid credentials!", result.Error.Message);
         }
 
         [Fact]
