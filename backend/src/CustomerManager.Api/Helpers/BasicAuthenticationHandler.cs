@@ -1,11 +1,10 @@
 ﻿using CustomerManager.Model.Common;
 using CustomerManager.Service.Interfaces;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
+using System.Linq;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
@@ -30,34 +29,31 @@ namespace CustomerManager.Api.Helpers
 
         protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
         {
-            var endpoint = Context.GetEndpoint();
-            if (endpoint?.Metadata?.GetMetadata<IAllowAnonymous>() != null)
-                return AuthenticateResult.NoResult();
-
-            if (!Request.Headers.ContainsKey("Authorization"))
-                return AuthenticateResult.Fail("missing authorization header!");
-
+            string login = null;
             try
             {
                 var authHeader = AuthenticationHeaderValue.Parse(Request.Headers["Authorization"]);
-                var credentialBytes = Convert.FromBase64String(authHeader.Parameter);
-                var credentials = Encoding.UTF8.GetString(credentialBytes).Split(new[] { ':' }, 2);
-                var user = new User() { Login = credentials[0], Password = credentials[1] };
+                var credentials = Encoding.UTF8.GetString(Convert.FromBase64String(authHeader.Parameter)).Split(':');
 
-                var authUserResult = await _userService.AuthenticateAsync(user);
-                if (!authUserResult.Value)
-                    return AuthenticateResult.Fail(authUserResult.Error.Message);
+                login = credentials.FirstOrDefault();
+                var password = credentials.LastOrDefault();
 
-                var claims = new[] { new Claim(ClaimTypes.GivenName, user.Login) };
-                var identity = new ClaimsIdentity(claims, Scheme.Name);
-                var principal = new ClaimsPrincipal(identity);
-                var ticket = new AuthenticationTicket(principal, Scheme.Name);
-                return AuthenticateResult.Success(ticket);
+                var user = new User() { Login = login, Password = password };
+                var authResult = await _userService.AuthenticateAsync(user);
+
+                if (authResult.Error != null)
+                    throw authResult.Error;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                return AuthenticateResult.Fail(e.Message);
+                return AuthenticateResult.Fail($"authentication failed: {ex.Message}");
             }
+
+            var claims = new[] { new Claim(ClaimTypes.Name, login) };
+            var identity = new ClaimsIdentity(claims, Scheme.Name);
+            var principal = new ClaimsPrincipal(identity);
+            var ticket = new AuthenticationTicket(principal, Scheme.Name);
+            return AuthenticateResult.Success(ticket);
         }
     }
 }

@@ -30,7 +30,7 @@ namespace CustomerManager.Service
 
                 var userRepository = await _userRepository.FindAsync(filter);
                 if (userRepository == null)
-                    return new Result<bool>(false, HttpStatusCode.NotFound, new Exception("invalid user!"));
+                    return new Result<bool>(false, HttpStatusCode.NotFound, new Exception("invalid credentials!"));
 
                 return new Result<bool>(true, HttpStatusCode.OK);
             }
