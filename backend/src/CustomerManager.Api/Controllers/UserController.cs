@@ -21,9 +21,7 @@ namespace CustomerManager.Api.Controllers
             _userService = userService;
         }
 
-        /// <summary>
-        /// Creates a new user
-        /// </summary>        
+        /// <summary> Creates a new user </summary>        
         /// <param name="user">User model</param>
         /// <returns>A newly created user</returns>
         /// <response code="201">A newly created user</response>

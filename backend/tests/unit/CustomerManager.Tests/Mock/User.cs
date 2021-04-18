@@ -15,32 +15,32 @@
             Failed = new Model.Common.User()
             {
                 Id = "507f191e810c19729de860ea",
-                Name = "Failed",
-                Login = "Failed",
+                FirstName = "Failed",
+                UserName = "Failed",
                 Password = "Failed"
             };
 
             Invalid = new Model.Common.User()
             {
                 Id = "5099803df3f4948bd2f98391",
-                Name = "Invalid",
-                Login = "Invalid",
+                FirstName = "Invalid",
+                UserName = "Invalid",
                 Password = "Invalid"
             };
 
             Exists = new Model.Common.User()
             {
                 Id = "5099223df433b948bd2e123153",
-                Name = "Exists",
-                Login = "Exists",
+                FirstName = "Exists",
+                UserName = "Exists",
                 Password = "Exists"
             };
 
             Success = new Model.Common.User()
             {
                 Id = "507f1f77bcf86cd799439011",
-                Name = "Success",
-                Login = "Success",
+                FirstName = "Success",
+                UserName = "Success",
                 Password = "Success"
             };
         }

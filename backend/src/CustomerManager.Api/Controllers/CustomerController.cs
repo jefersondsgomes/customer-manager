@@ -1,7 +1,6 @@
 ﻿using CustomerManager.Model.Common;
 using CustomerManager.Model.Result;
 using CustomerManager.Service.Interfaces;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -26,11 +25,13 @@ namespace CustomerManager.Api.Controllers
         /// <returns> The customer corresponding to the given Id </returns>
         /// <param name="id"> Represents the customer id </param>
         /// <response code="200"> A finded customer </response>
-        /// <response code="400"> Invalid customer Id </response>        
+        /// <response code="400"> Invalid customer Id </response>
+        /// <response code="401"> Invalid authorization </response>
         /// <response code="404"> Customer not found </response>
-        /// <response code="500"> Server error </response>                
+        /// <response code="500"> Server error </response>
         [ProducesResponseType(typeof(Customer), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
         [HttpGet("{id:length(24)}")]
@@ -46,10 +47,12 @@ namespace CustomerManager.Api.Controllers
         /// <summary> Get all customers </summary>
         /// <returns> All database clients </returns>
         /// <response code="200"> Success </response>
-        /// <response code="204"> There are no customers </response>           
+        /// <response code="204"> There are no customers </response>    
+        /// <response code="401"> Invalid authorization </response>     
         /// <response code="500"> Server error </response>
         [ProducesResponseType(typeof(List<Customer>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
@@ -65,9 +68,11 @@ namespace CustomerManager.Api.Controllers
         /// <param name="customer"> Represents the customer model </param>
         /// <response code="201"> Success </response>
         /// <response code="400"> Invalid customer </response>           
+        /// <response code="401"> Invalid authorization </response>     
         /// <response code="500"> Server error </response>
         [ProducesResponseType(typeof(Customer), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
         [HttpPost]
         public async Task<IActionResult> CreateAsync(Customer customer)
@@ -84,10 +89,12 @@ namespace CustomerManager.Api.Controllers
         /// <param name="customer"> Represents the updated customer model </param>
         /// <response code="204"> Updated </response>
         /// <response code="400"> Invalid id or customer </response>           
+        /// <response code="401"> Invalid authorization </response>     
         /// <response code="404"> Customer id does not exists </response>
         /// <response code="500"> Server error </response>  
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
         [HttpPut("{id:length(24)}")]
@@ -104,9 +111,11 @@ namespace CustomerManager.Api.Controllers
         /// <param name="id"> Customer id </param>
         /// <response code="204"> Removes the customer if it exists </response>
         /// <response code="400"> Invalid customer id </response>        
+        /// <response code="401"> Invalid authorization </response>     
         /// <response code="500"> Server error </response>        
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpDelete("{id:length(24)}")]
         public async Task<IActionResult> DeleteAsync(string id)
