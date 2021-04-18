@@ -1,9 +1,9 @@
 using CustomerManager.Api.Helpers;
+using CustomerManager.Model.Helper;
 using CustomerManager.Repository;
 using CustomerManager.Repository.Interfaces;
 using CustomerManager.Service;
 using CustomerManager.Service.Interfaces;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -20,35 +20,28 @@ namespace CustomerManager.Api
     {
         public IConfiguration Configuration { get; }
         private readonly IMongoSettings _mongoSettings;
+        private readonly AppSettings _appSettings;
 
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
             _mongoSettings = Configuration.GetSection(nameof(MongoSettings)).Get<MongoSettings>();
+            _appSettings = Configuration.GetSection(nameof(AppSettings)).Get<AppSettings>();
         }
 
         public void ConfigureServices(IServiceCollection services)
         {
             services
                 .AddSingleton(_mongoSettings)
+                .AddSingleton(_appSettings)
                 .AddSingleton(typeof(IMongoRepository<>), typeof(MongoRepository<>))
                 .AddScoped<ICustomerService, CustomerService>()
                 .AddScoped<IUserService, UserService>()
+                .AddScoped<IAuthenticationService, AuthenticationService>()
                 .AddControllers();
 
-            services.AddAuthentication("BasicAuthentication")
-                .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
-
-            services.AddCors(options =>
-            {
-                options.AddPolicy("CorsPolicy",
-                    builder => builder.AllowAnyOrigin()
-                    .AllowAnyMethod()
-                    .AllowAnyHeader());
-            });
-
             services.AddSwaggerGen(c =>
-            {                
+            {
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Version = "v1",
@@ -62,30 +55,6 @@ namespace CustomerManager.Api
                     }
                 });
 
-                c.AddSecurityDefinition("basic", new OpenApiSecurityScheme
-                {
-                    Name = "Authorization",
-                    Type = SecuritySchemeType.Http,
-                    Scheme = "basic",
-                    In = ParameterLocation.Header,
-                    Description = "basic authorization header using the bearer scheme."
-                });
-
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                    {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference
-                            {
-                                Type = ReferenceType.SecurityScheme,
-                                Id = "basic"
-                            }
-                        },
-                        new string[] {}
-                    }
-                });
-
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath, true);
@@ -95,16 +64,12 @@ namespace CustomerManager.Api
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
-            {
                 app.UseDeveloperExceptionPage();
-            }
 
             app.UseHttpsRedirection();
             app.UseRouting();
-            app.UseAuthentication();
-            app.UseAuthorization();
+            app.UseMiddleware<JwtMiddleware>();
             app.UseEndpoints(endpoints => endpoints.MapControllers());
-            app.UseCors("CorsPolicy");
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {

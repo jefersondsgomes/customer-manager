@@ -1,5 +1,6 @@
 using CustomerManager.Repository;
 using MongoDB.Bson.Serialization.Attributes;
+using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 
 namespace CustomerManager.Model.Common
@@ -8,15 +9,35 @@ namespace CustomerManager.Model.Common
     public class User : Document
     {
         [Required]
-        [BsonElement("name")]
-        public string Name { get; set; }
+        [BsonElement("firstName")]
+        public string FirstName { get; set; }
 
         [Required]
-        [BsonElement("login")]
-        public string Login { get; set; }
+        [BsonElement("lastName")]
+        public string LastName { get; set; }
 
         [Required]
+        [BsonElement("email")]
+        public string Email { get; set; }
+
+        [Required]
+        [BsonElement("userName")]
+        public string UserName { get; set; }
+
+        [Required]
+        [JsonIgnore]
         [BsonElement("password")]
         public string Password { get; set; }
+
+        public User(string userName, string password)
+        {
+            UserName = userName;
+            Password = password;
+        }
+
+        public User()
+        {
+
+        }
     }
 }

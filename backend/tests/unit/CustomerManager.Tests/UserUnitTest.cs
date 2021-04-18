@@ -29,6 +29,9 @@ namespace CustomerManager.Test
         {
             _userRepository.CreateAsync(Mock.User.Failed).Throws(new Exception());
             _userRepository.CreateAsync(Mock.User.Success).Returns(Task.FromResult(Mock.User.Success));
+            _userRepository.FindAsync("0").Throws(new Exception());
+            _userRepository.FindAsync("1").Returns(Task.FromResult<User>(null));
+            _userRepository.FindAsync("2").Returns(Task.FromResult(new User()));
         }
 
         [Fact]
@@ -113,6 +116,43 @@ namespace CustomerManager.Test
             var result = await _userService.CreateAsync(Mock.User.Success);
             Assert.NotNull(result.Value);
             Assert.Equal(HttpStatusCode.Created, result.StatusCode);
+            Assert.Null(result.Error);
+        }
+
+        [Fact]
+        public async Task TestGetUserShouldReturnExceptionResultWhenIdIsNullOrEmpty()
+        {
+            var result = await _userService.GetAsync(string.Empty);
+            Assert.Null(result.Value);
+            Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
+            Assert.NotNull(result.Error);
+            Assert.IsType<ArgumentException>(result.Error);
+        }
+
+        [Fact]
+        public async Task TestGetUserShouldReturnExceptionResultWhenRepositoryFail()
+        {
+            var result = await _userService.GetAsync("0");
+            Assert.Null(result.Value);
+            Assert.Equal(HttpStatusCode.InternalServerError, result.StatusCode);
+            Assert.NotNull(result.Error);
+        }
+
+        [Fact]
+        public async Task TestGetUserShouldReturnExceptionResultWhenUserWasNotFound()
+        {
+            var result = await _userService.GetAsync("1");
+            Assert.Null(result.Value);
+            Assert.Equal(HttpStatusCode.NotFound, result.StatusCode);
+            Assert.NotNull(result.Error);
+        }
+
+        [Fact]
+        public async Task TestGetUserShouldReturnOk()
+        {
+            var result = await _userService.GetAsync("2");
+            Assert.NotNull(result.Value);
+            Assert.Equal(HttpStatusCode.OK, result.StatusCode);
             Assert.Null(result.Error);
         }
     }

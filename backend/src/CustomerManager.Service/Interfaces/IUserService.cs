@@ -8,5 +8,6 @@ namespace CustomerManager.Service.Interfaces
     {
         Task<Result<bool>> AuthenticateAsync(User user);
         Task<Result<User>> CreateAsync(User user);
+        Task<Result<User>> GetAsync(string id);
     }
 }

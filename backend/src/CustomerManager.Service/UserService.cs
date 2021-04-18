@@ -26,7 +26,7 @@ namespace CustomerManager.Service
 
             try
             {
-                var filter = Builders<User>.Filter.Where(u => u.Login == user.Login && u.Password == user.Password);
+                var filter = Builders<User>.Filter.Where(u => u.UserName == user.UserName && u.Password == user.Password);
 
                 var userRepository = await _userRepository.FindAsync(filter);
                 if (userRepository == null)
@@ -49,7 +49,7 @@ namespace CustomerManager.Service
             try
             {
                 var builder = Builders<User>.Filter;
-                var filter = builder.Eq(u => u.Login, user.Login) & builder.Eq(u => u.Password, user.Password);
+                var filter = builder.Eq(u => u.UserName, user.UserName) & builder.Eq(u => u.Password, user.Password);
                 var dbUser = await _userRepository.FindAsync(filter);
 
                 if (dbUser != null)
@@ -62,6 +62,26 @@ namespace CustomerManager.Service
             {
                 return new Result<User>(null, HttpStatusCode.InternalServerError,
                     new Exception($"could not create user: {e.Message}"));
+            }
+        }
+
+        public async Task<Result<User>> GetAsync(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+                return new Result<User>(null, HttpStatusCode.BadRequest, new ArgumentException("id can't be null or empty!"));
+
+            try
+            {
+                var user = await _userRepository.FindAsync(id);
+                if (user == null)
+                    return new Result<User>(null, HttpStatusCode.NotFound, new Exception("user was not found!"));
+
+                return new Result<User>(user, HttpStatusCode.OK);
+            }
+            catch (Exception e)
+            {
+                return new Result<User>(null, HttpStatusCode.InternalServerError,
+                    new Exception($"could not find user: {e.Message}"));
             }
         }
     }
