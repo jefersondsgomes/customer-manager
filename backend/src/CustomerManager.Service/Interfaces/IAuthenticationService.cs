@@ -1,8 +1,8 @@
-﻿using CustomerManager.Model.Result;
-using CustomerManager.Model.Transient;
+﻿using CustomerManager.Models.Results;
+using CustomerManager.Models.Transients;
 using System.Threading.Tasks;
 
-namespace CustomerManager.Service.Interfaces
+namespace CustomerManager.Services.Interfaces
 {
     public interface IAuthenticationService
     {

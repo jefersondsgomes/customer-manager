@@ -1,9 +1,9 @@
-﻿using CustomerManager.Model.Common;
-using CustomerManager.Model.Helper;
-using CustomerManager.Model.Result;
-using CustomerManager.Model.Transient;
-using CustomerManager.Repository.Interfaces;
-using CustomerManager.Service.Interfaces;
+﻿using CustomerManager.Models.Entities;
+using CustomerManager.Models.Helpers.Interfaces;
+using CustomerManager.Models.Results;
+using CustomerManager.Models.Transients;
+using CustomerManager.Repositories.Interfaces;
+using CustomerManager.Services.Interfaces;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Driver;
 using System;
@@ -13,14 +13,14 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CustomerManager.Service
+namespace CustomerManager.Services
 {
     public class AuthenticationService : IAuthenticationService
     {
         private readonly IMongoRepository<User> _userRepository;
-        private readonly AppSettings _appSettings;
+        private readonly IAppSettings _appSettings;
 
-        public AuthenticationService(IMongoRepository<User> userRepository, AppSettings appSettings)
+        public AuthenticationService(IMongoRepository<User> userRepository, IAppSettings appSettings)
         {
             _userRepository = userRepository;
             _appSettings = appSettings;
@@ -42,7 +42,7 @@ namespace CustomerManager.Service
                 var filter = Builders<User>.Filter.Where(u => u.UserName == authenticateRequest.Username && u.Password == authenticateRequest.Password);
                 var user = await _userRepository.FindAsync(filter);
                 if (user == null)
-                    return new Result<AuthenticateResponse>(null, HttpStatusCode.NotFound, new Exception("user was not found!"));
+                    return new Result<AuthenticateResponse>(null, HttpStatusCode.NotFound, new Exception("invalid user or password!"));
 
                 var token = GenerateJwtToken(user);
                 var authenticateResponse = new AuthenticateResponse(user, token);
@@ -60,7 +60,7 @@ namespace CustomerManager.Service
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[] { new Claim("id", user.Id.ToString()) }),
+                Subject = new ClaimsIdentity(new[] { new Claim("id", user.Id) }),
                 Expires = DateTime.UtcNow.AddHours(12),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };

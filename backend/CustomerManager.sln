@@ -9,13 +9,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{CEDA644E
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "unit", "unit", "{A7ABDEFA-A9FD-4101-9341-81713781C8E8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CustomerManager.Model", "src\CustomerManager.Model\CustomerManager.Model.csproj", "{4F4CF0B2-13F4-4E40-9D1E-5ABBE79939C6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CustomerManager.Models", "src\CustomerManager.Model\CustomerManager.Models.csproj", "{4F4CF0B2-13F4-4E40-9D1E-5ABBE79939C6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CustomerManager.Repository", "src\CustomerManager.Repository\CustomerManager.Repository.csproj", "{F24D49F4-ADC2-4F40-BAE3-17FAF3BF20E3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CustomerManager.Repositories", "src\CustomerManager.Repository\CustomerManager.Repositories.csproj", "{F24D49F4-ADC2-4F40-BAE3-17FAF3BF20E3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CustomerManager.Service", "src\CustomerManager.Service\CustomerManager.Service.csproj", "{8FEB9E10-7080-4B21-8919-9DC322F57EE2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CustomerManager.Services", "src\CustomerManager.Service\CustomerManager.Services.csproj", "{8FEB9E10-7080-4B21-8919-9DC322F57EE2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CustomerManager.Test", "tests\unit\CustomerManager.Tests\CustomerManager.Test.csproj", "{A048EF9D-DC89-435D-AFFB-EAC6CA20B49D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CustomerManager.Tests", "tests\unit\CustomerManager.Tests\CustomerManager.Tests.csproj", "{A048EF9D-DC89-435D-AFFB-EAC6CA20B49D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CustomerManager.Api", "src\CustomerManager.Api\CustomerManager.Api.csproj", "{912FC047-F12C-4C3B-A532-9C8BD6D6F55F}"
 EndProject

@@ -1,20 +1,20 @@
-﻿using CustomerManager.Model.Common;
+﻿using CustomerManager.Models.Entities;
 using System;
 using System.Collections.Generic;
 
-namespace CustomerManager.Test.Mock
+namespace CustomerManager.Tests.Mocks
 {
     public static class Customer
     {
-        public static Model.Common.Customer Null;
-        public static Model.Common.Customer Failed;
-        public static Model.Common.Customer Success;
+        public static Models.Entities.Customer Null;
+        public static Models.Entities.Customer Failed;
+        public static Models.Entities.Customer Success;
 
         static Customer()
         {
             Null = null;
 
-            Failed = new Model.Common.Customer()
+            Failed = new Models.Entities.Customer()
             {
                 Id = "507f191e810c19729de860ea",
                 Name = "Error",
@@ -26,7 +26,7 @@ namespace CustomerManager.Test.Mock
                 Phones = null
             };
 
-            Success = new Model.Common.Customer()
+            Success = new Models.Entities.Customer()
             {
                 Id = "507f1f77bcf86cd799439011",
                 Name = "Success",

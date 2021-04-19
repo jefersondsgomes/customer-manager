@@ -1,6 +1,6 @@
-﻿using CustomerManager.Model.Common;
-using CustomerManager.Model.Result;
-using CustomerManager.Service.Interfaces;
+﻿using CustomerManager.Models.Entities;
+using CustomerManager.Models.Results;
+using CustomerManager.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;

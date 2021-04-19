@@ -18,8 +18,8 @@
     <PackageReference Include="MongoDB.Driver" Version="2.11.6" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\src\CustomerManager.Model\CustomerManager.Model.csproj" />
-    <ProjectReference Include="..\..\..\src\CustomerManager.Repository\CustomerManager.Repository.csproj" />
-    <ProjectReference Include="..\..\..\src\CustomerManager.Service\CustomerManager.Service.csproj" />
+    <ProjectReference Include="..\..\..\src\CustomerManager.Model\CustomerManager.Models.csproj" />
+    <ProjectReference Include="..\..\..\src\CustomerManager.Repository\CustomerManager.Repositories.csproj" />
+    <ProjectReference Include="..\..\..\src\CustomerManager.Service\CustomerManager.Services.csproj" />
   </ItemGroup>
 </Project>

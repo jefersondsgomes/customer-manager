@@ -1,8 +1,8 @@
-using CustomerManager.Model.Common;
-using CustomerManager.Model.Result;
+using CustomerManager.Models.Entities;
+using CustomerManager.Models.Results;
 using System.Threading.Tasks;
 
-namespace CustomerManager.Service.Interfaces
+namespace CustomerManager.Services.Interfaces
 {
     public interface IUserService
     {

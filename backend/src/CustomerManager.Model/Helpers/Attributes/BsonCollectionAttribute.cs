@@ -1,6 +1,6 @@
 using System;
 
-namespace CustomerManager.Repository
+namespace CustomerManager.Models.Helpers.Attributes
 {
     [AttributeUsage(AttributeTargets.Class, Inherited = false)]
     public class BsonCollectionAttribute : Attribute

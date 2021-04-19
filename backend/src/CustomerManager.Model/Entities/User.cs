@@ -1,9 +1,10 @@
-using CustomerManager.Repository;
+using CustomerManager.Models.Helpers;
+using CustomerManager.Models.Helpers.Attributes;
 using MongoDB.Bson.Serialization.Attributes;
 using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 
-namespace CustomerManager.Model.Common
+namespace CustomerManager.Models.Entities
 {
     [BsonCollection("user")]
     public class User : Document

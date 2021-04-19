@@ -1,6 +1,6 @@
-﻿using CustomerManager.Model.Result;
-using CustomerManager.Model.Transient;
-using CustomerManager.Service.Interfaces;
+﻿using CustomerManager.Models.Results;
+using CustomerManager.Models.Transients;
+using CustomerManager.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 

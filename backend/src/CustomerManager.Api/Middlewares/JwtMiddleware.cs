@@ -1,5 +1,5 @@
-﻿using CustomerManager.Model.Helper;
-using CustomerManager.Service.Interfaces;
+﻿using CustomerManager.Models.Helpers.Interfaces;
+using CustomerManager.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -8,14 +8,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CustomerManager.Api.Helpers
+namespace CustomerManager.Api.Middlewares
 {
     public class JwtMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly AppSettings _appSettings;
+        private readonly IAppSettings _appSettings;
 
-        public JwtMiddleware(RequestDelegate next, AppSettings appSettings)
+        public JwtMiddleware(RequestDelegate next, IAppSettings appSettings)
         {
             _next = next;
             _appSettings = appSettings;
