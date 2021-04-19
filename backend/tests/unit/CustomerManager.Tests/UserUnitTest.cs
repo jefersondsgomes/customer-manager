@@ -1,7 +1,7 @@
-using CustomerManager.Model.Common;
-using CustomerManager.Repository.Interfaces;
-using CustomerManager.Service;
-using CustomerManager.Service.Interfaces;
+using CustomerManager.Models.Entities;
+using CustomerManager.Repositories.Interfaces;
+using CustomerManager.Services;
+using CustomerManager.Services.Interfaces;
 using MongoDB.Driver;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
@@ -10,7 +10,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace CustomerManager.Test
+namespace CustomerManager.Tests
 {
     public class UserUnitTest
     {
@@ -27,8 +27,8 @@ namespace CustomerManager.Test
 
         private void Setup()
         {
-            _userRepository.CreateAsync(Mock.User.Failed).Throws(new Exception());
-            _userRepository.CreateAsync(Mock.User.Success).Returns(Task.FromResult(Mock.User.Success));
+            _userRepository.CreateAsync(Mocks.User.Failed).Throws(new Exception());
+            _userRepository.CreateAsync(Mocks.User.Success).Returns(Task.FromResult(Mocks.User.Success));
             _userRepository.FindAsync("0").Throws(new Exception());
             _userRepository.FindAsync("1").Returns(Task.FromResult<User>(null));
             _userRepository.FindAsync("2").Returns(Task.FromResult(new User()));
@@ -49,7 +49,7 @@ namespace CustomerManager.Test
         public async Task TestAuthenticateShouldReturnFalseWhenExecutionFail()
         {
             _userRepository.FindAsync(Arg.Any<FilterDefinition<User>>()).Throws(new Exception());
-            var result = await _userService.AuthenticateAsync(Mock.User.Failed);
+            var result = await _userService.AuthenticateAsync(Mocks.User.Failed);
             Assert.False(result.Value);
             Assert.Equal(HttpStatusCode.InternalServerError, result.StatusCode);
             Assert.NotNull(result.Error);
@@ -59,8 +59,8 @@ namespace CustomerManager.Test
         [Fact]
         public async Task TestAuthenticateShouldReturnFalseWhenUserNotFound()
         {
-            _userRepository.FindAsync(Arg.Any<FilterDefinition<User>>()).Returns(Task.FromResult(Mock.User.Null));
-            var result = await _userService.AuthenticateAsync(Mock.User.Invalid);
+            _userRepository.FindAsync(Arg.Any<FilterDefinition<User>>()).Returns(Task.FromResult(Mocks.User.Null));
+            var result = await _userService.AuthenticateAsync(Mocks.User.Invalid);
             Assert.False(result.Value);
             Assert.Equal(HttpStatusCode.NotFound, result.StatusCode);
             Assert.NotNull(result.Error);
@@ -70,8 +70,8 @@ namespace CustomerManager.Test
         [Fact]
         public async Task TestAuthenticateUserShouldReturnTrueWhenOk()
         {
-            _userRepository.FindAsync(Arg.Any<FilterDefinition<User>>()).Returns(Task.FromResult(Mock.User.Success));
-            var result = await _userService.AuthenticateAsync(Mock.User.Success);
+            _userRepository.FindAsync(Arg.Any<FilterDefinition<User>>()).Returns(Task.FromResult(Mocks.User.Success));
+            var result = await _userService.AuthenticateAsync(Mocks.User.Success);
             Assert.True(result.Value);
             Assert.Equal(HttpStatusCode.OK, result.StatusCode);
             Assert.Null(result.Error);
@@ -80,7 +80,7 @@ namespace CustomerManager.Test
         [Fact]
         public async Task TestCreateUserShouldReturnExceptionWhenUserIsNull()
         {
-            var result = await _userService.CreateAsync(Mock.User.Null);
+            var result = await _userService.CreateAsync(Mocks.User.Null);
             Assert.Null(result.Value);
             Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
             Assert.NotNull(result.Error);
@@ -91,7 +91,7 @@ namespace CustomerManager.Test
         [Fact]
         public async Task TestCreateUserShouldReturnExceptionWhenRepositoryFail()
         {
-            var result = await _userService.CreateAsync(Mock.User.Failed);
+            var result = await _userService.CreateAsync(Mocks.User.Failed);
             Assert.Null(result.Value);
             Assert.Equal(HttpStatusCode.InternalServerError, result.StatusCode);
             Assert.NotNull(result.Error);
@@ -101,8 +101,8 @@ namespace CustomerManager.Test
         [Fact]
         public async Task TesteCreateUserShouldReturnExceptionResultWhenUserAlreadyExists()
         {
-            _userRepository.FindAsync(Arg.Any<FilterDefinition<User>>()).Returns(Mock.User.Exists);
-            var result = await _userService.CreateAsync(Mock.User.Exists);
+            _userRepository.FindAsync(Arg.Any<FilterDefinition<User>>()).Returns(Mocks.User.Exists);
+            var result = await _userService.CreateAsync(Mocks.User.Exists);
             Assert.NotNull(result.Value);
             Assert.Equal(HttpStatusCode.Conflict, result.StatusCode);
             Assert.NotNull(result.Error);
@@ -113,7 +113,7 @@ namespace CustomerManager.Test
         public async Task TestCreateUserShouldReturnOk()
         {
             _userRepository.FindAsync(Arg.Any<FilterDefinition<User>>()).Returns(Task.FromResult<User>(null));
-            var result = await _userService.CreateAsync(Mock.User.Success);
+            var result = await _userService.CreateAsync(Mocks.User.Success);
             Assert.NotNull(result.Value);
             Assert.Equal(HttpStatusCode.Created, result.StatusCode);
             Assert.Null(result.Error);

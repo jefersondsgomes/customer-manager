@@ -1,4 +1,4 @@
-﻿using CustomerManager.Model.Common;
+﻿using CustomerManager.Models.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

@@ -1,14 +1,14 @@
-using CustomerManager.Model.Common;
-using CustomerManager.Model.Result;
-using CustomerManager.Repository.Interfaces;
-using CustomerManager.Service.Interfaces;
+using CustomerManager.Models.Entities;
+using CustomerManager.Models.Results;
+using CustomerManager.Repositories.Interfaces;
+using CustomerManager.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace CustomerManager.Service
+namespace CustomerManager.Services
 {
     public class CustomerService : ICustomerService
     {

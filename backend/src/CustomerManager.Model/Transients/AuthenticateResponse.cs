@@ -1,6 +1,6 @@
-﻿using CustomerManager.Model.Common;
+﻿using CustomerManager.Models.Entities;
 
-namespace CustomerManager.Model.Transient
+namespace CustomerManager.Models.Transients
 {
     public class AuthenticateResponse
     {

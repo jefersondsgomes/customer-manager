@@ -1,9 +1,10 @@
-using CustomerManager.Api.Helpers;
-using CustomerManager.Model.Helper;
-using CustomerManager.Repository;
-using CustomerManager.Repository.Interfaces;
-using CustomerManager.Service;
-using CustomerManager.Service.Interfaces;
+using CustomerManager.Api.Middlewares;
+using CustomerManager.Models.Helpers;
+using CustomerManager.Models.Helpers.Interfaces;
+using CustomerManager.Repositories;
+using CustomerManager.Repositories.Interfaces;
+using CustomerManager.Services;
+using CustomerManager.Services.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -20,7 +21,7 @@ namespace CustomerManager.Api
     {
         public IConfiguration Configuration { get; }
         private readonly IMongoSettings _mongoSettings;
-        private readonly AppSettings _appSettings;
+        private readonly IAppSettings _appSettings;
 
         public Startup(IConfiguration configuration)
         {
@@ -54,6 +55,27 @@ namespace CustomerManager.Api
                         Url = new Uri("https://www.linkedin.com/in/jefersondsgomes/"),
                     }
                 });
+
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Description = "Insert JWT with Bearer into field",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        }
+                    },
+                    new string[] { }
+                }});
 
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);

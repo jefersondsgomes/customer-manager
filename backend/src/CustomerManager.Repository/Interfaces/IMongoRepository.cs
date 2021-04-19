@@ -1,8 +1,9 @@
+using CustomerManager.Models.Helpers.Interfaces;
 using MongoDB.Driver;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace CustomerManager.Repository.Interfaces
+namespace CustomerManager.Repositories.Interfaces
 {
     public interface IMongoRepository<TDocument> where TDocument : IDocument
     {

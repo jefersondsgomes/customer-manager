@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace CustomerManager.Model.Transient
+namespace CustomerManager.Models.Transients
 {
     public class AuthenticateRequest
     {

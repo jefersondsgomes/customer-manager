@@ -1,6 +1,6 @@
-using CustomerManager.Repository.Interfaces;
+using CustomerManager.Models.Helpers.Interfaces;
 
-namespace CustomerManager.Repository
+namespace CustomerManager.Models.Helpers
 {
     public class MongoSettings : IMongoSettings
     {

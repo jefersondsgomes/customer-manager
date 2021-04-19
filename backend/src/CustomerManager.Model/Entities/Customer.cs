@@ -1,9 +1,10 @@
-using CustomerManager.Repository;
+using CustomerManager.Models.Helpers;
+using CustomerManager.Models.Helpers.Attributes;
 using MongoDB.Bson.Serialization.Attributes;
 using System;
 using System.Collections.Generic;
 
-namespace CustomerManager.Model.Common
+namespace CustomerManager.Models.Entities
 {
     [BsonCollection("customer")]
     public class Customer : Document

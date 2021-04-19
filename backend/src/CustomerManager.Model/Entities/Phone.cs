@@ -1,6 +1,6 @@
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace CustomerManager.Model.Common
+namespace CustomerManager.Models.Entities
 {
     public class Phone
     {

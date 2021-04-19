@@ -1,7 +1,7 @@
 using System;
 using System.Net;
 
-namespace CustomerManager.Model.Result
+namespace CustomerManager.Models.Results
 {
     public class Result
     {

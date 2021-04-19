@@ -1,9 +1,9 @@
-using CustomerManager.Repository.Interfaces;
+using CustomerManager.Models.Helpers.Interfaces;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using System;
 
-namespace CustomerManager.Repository
+namespace CustomerManager.Models.Helpers
 {
     public abstract class Document : IDocument
     {

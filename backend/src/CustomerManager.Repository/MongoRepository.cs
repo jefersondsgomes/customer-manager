@@ -1,11 +1,13 @@
-using CustomerManager.Repository.Interfaces;
+using CustomerManager.Models.Helpers.Attributes;
+using CustomerManager.Models.Helpers.Interfaces;
+using CustomerManager.Repositories.Interfaces;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CustomerManager.Repository
+namespace CustomerManager.Repositories
 {
     public class MongoRepository<TDocument> : IMongoRepository<TDocument>
         where TDocument : IDocument

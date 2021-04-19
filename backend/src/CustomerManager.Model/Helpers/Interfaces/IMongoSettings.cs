@@ -1,4 +1,4 @@
-namespace CustomerManager.Repository.Interfaces
+namespace CustomerManager.Models.Helpers.Interfaces
 {
     public interface IMongoSettings
     {

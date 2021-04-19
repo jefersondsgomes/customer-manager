@@ -1,18 +1,18 @@
-﻿namespace CustomerManager.Test.Mock
+﻿namespace CustomerManager.Tests.Mocks
 {
     public static class User
     {
-        public static Model.Common.User Null;
-        public static Model.Common.User Failed;
-        public static Model.Common.User Invalid;
-        public static Model.Common.User Exists;
-        public static Model.Common.User Success;
+        public static Models.Entities.User Null;
+        public static Models.Entities.User Failed;
+        public static Models.Entities.User Invalid;
+        public static Models.Entities.User Exists;
+        public static Models.Entities.User Success;
 
         static User()
         {
             Null = null;
 
-            Failed = new Model.Common.User()
+            Failed = new Models.Entities.User()
             {
                 Id = "507f191e810c19729de860ea",
                 FirstName = "Failed",
@@ -20,7 +20,7 @@
                 Password = "Failed"
             };
 
-            Invalid = new Model.Common.User()
+            Invalid = new Models.Entities.User()
             {
                 Id = "5099803df3f4948bd2f98391",
                 FirstName = "Invalid",
@@ -28,7 +28,7 @@
                 Password = "Invalid"
             };
 
-            Exists = new Model.Common.User()
+            Exists = new Models.Entities.User()
             {
                 Id = "5099223df433b948bd2e123153",
                 FirstName = "Exists",
@@ -36,7 +36,7 @@
                 Password = "Exists"
             };
 
-            Success = new Model.Common.User()
+            Success = new Models.Entities.User()
             {
                 Id = "507f1f77bcf86cd799439011",
                 FirstName = "Success",

@@ -1,7 +1,7 @@
-using CustomerManager.Model.Common;
-using CustomerManager.Repository.Interfaces;
-using CustomerManager.Service;
-using CustomerManager.Service.Interfaces;
+using CustomerManager.Models.Entities;
+using CustomerManager.Repositories.Interfaces;
+using CustomerManager.Services;
+using CustomerManager.Services.Interfaces;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using System;
@@ -11,7 +11,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace CustomerManager.Test
+namespace CustomerManager.Tests
 {
     public class CustomerUnitTest
     {
@@ -28,24 +28,24 @@ namespace CustomerManager.Test
 
         private void Setup()
         {
-            _customerRepository.CreateAsync(Mock.Customer.Failed).Throws(new Exception());
-            _customerRepository.CreateAsync(Mock.Customer.Success).Returns(Task.FromResult(Mock.Customer.Success));
+            _customerRepository.CreateAsync(Mocks.Customer.Failed).Throws(new Exception());
+            _customerRepository.CreateAsync(Mocks.Customer.Success).Returns(Task.FromResult(Mocks.Customer.Success));
 
             _customerRepository.FindAsync("123").Throws(new Exception());
             _customerRepository.FindAsync("456").Returns(Task.FromResult<Customer>(null));
-            _customerRepository.FindAsync("789").Returns(Task.FromResult(Mock.Customer.Success));
+            _customerRepository.FindAsync("789").Returns(Task.FromResult(Mocks.Customer.Success));
 
-            _customerRepository.ReplaceAsync("789", Mock.Customer.Failed).Throws(new Exception());
-            _customerRepository.ReplaceAsync("789", Mock.Customer.Success).Returns(Task.FromResult(Mock.Customer.Success));
+            _customerRepository.ReplaceAsync("789", Mocks.Customer.Failed).Throws(new Exception());
+            _customerRepository.ReplaceAsync("789", Mocks.Customer.Success).Returns(Task.FromResult(Mocks.Customer.Success));
 
             _customerRepository.RemoveAsync("456").Throws(new Exception());
-            _customerRepository.RemoveAsync("789").Returns(Task.FromResult(Mock.Customer.Success));
+            _customerRepository.RemoveAsync("789").Returns(Task.FromResult(Mocks.Customer.Success));
         }
 
         [Fact]
         public async Task TestCreateShouldReturnErrorResultWhenCustomerIsNull()
         {
-            var result = await _customerService.CreateAsync(Mock.Customer.Null);
+            var result = await _customerService.CreateAsync(Mocks.Customer.Null);
             Assert.Null(result.Value);
             Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
             Assert.NotNull(result.Error);
@@ -56,7 +56,7 @@ namespace CustomerManager.Test
         [Fact]
         public async Task TestCreateShouldReturnErrorResultWhenCannotCreate()
         {
-            var result = await _customerService.CreateAsync(Mock.Customer.Failed);
+            var result = await _customerService.CreateAsync(Mocks.Customer.Failed);
             Assert.NotNull(result.Value);
             Assert.Equal(HttpStatusCode.InternalServerError, result.StatusCode);
             Assert.NotNull(result.Error);
@@ -66,7 +66,7 @@ namespace CustomerManager.Test
         [Fact]
         public async Task TestCreateShouldReturnSuccessWhenExecutionIsOk()
         {
-            var result = await _customerService.CreateAsync(Mock.Customer.Success);
+            var result = await _customerService.CreateAsync(Mocks.Customer.Success);
             Assert.NotNull(result.Value);
             Assert.Equal(HttpStatusCode.Created, result.StatusCode);
             Assert.Null(result.Error);
@@ -149,8 +149,8 @@ namespace CustomerManager.Test
         [Fact]
         public async Task TestUpdateShouldReturnErrorResultWhenIdNull()
         {
-            var result = await _customerService.UpdateAsync(null, Mock.Customer.Success);
-            Assert.Equal(Mock.Customer.Success, result.Value);
+            var result = await _customerService.UpdateAsync(null, Mocks.Customer.Success);
+            Assert.Equal(Mocks.Customer.Success, result.Value);
             Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
             Assert.NotNull(result.Error);
             Assert.IsType<ArgumentNullException>(result.Error);
@@ -160,7 +160,7 @@ namespace CustomerManager.Test
         [Fact]
         public async Task TestUpdateShouldReturnErrorResultWhenCustomerIsNull()
         {
-            var result = await _customerService.UpdateAsync("123", Mock.Customer.Null);
+            var result = await _customerService.UpdateAsync("123", Mocks.Customer.Null);
             Assert.Null(result.Value);
             Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
             Assert.NotNull(result.Error);
@@ -171,7 +171,7 @@ namespace CustomerManager.Test
         [Fact]
         public async Task TestUpdateShouldReturnErrorResultWhenCustomerDoesNotExistsInDatabase()
         {
-            var result = await _customerService.UpdateAsync("456", Mock.Customer.Success);
+            var result = await _customerService.UpdateAsync("456", Mocks.Customer.Success);
             Assert.NotNull(result.Error);
             Assert.Equal(HttpStatusCode.NotFound, result.StatusCode);
             Assert.NotNull(result.Error);
@@ -181,8 +181,8 @@ namespace CustomerManager.Test
         [Fact]
         public async Task TestUpdateShouldReturnErrorResultWhenExceptionsWasThrowedInExecution()
         {
-            var result = await _customerService.UpdateAsync("789", Mock.Customer.Failed);
-            Assert.Equal(Mock.Customer.Failed, result.Value);
+            var result = await _customerService.UpdateAsync("789", Mocks.Customer.Failed);
+            Assert.Equal(Mocks.Customer.Failed, result.Value);
             Assert.Equal(HttpStatusCode.InternalServerError, result.StatusCode);
             Assert.NotNull(result.Error);
             Assert.Contains("could not be update the customer:", result.Error.Message);
@@ -191,8 +191,8 @@ namespace CustomerManager.Test
         [Fact]
         public async Task TestUpdateShouldReturnSuccessResultWhenExecutionIsOk()
         {
-            var result = await _customerService.UpdateAsync("789", Mock.Customer.Success);
-            Assert.Equal(Mock.Customer.Success, result.Value);
+            var result = await _customerService.UpdateAsync("789", Mocks.Customer.Success);
+            Assert.Equal(Mocks.Customer.Success, result.Value);
             Assert.Equal(HttpStatusCode.NoContent, result.StatusCode);
             Assert.Null(result.Error);
         }

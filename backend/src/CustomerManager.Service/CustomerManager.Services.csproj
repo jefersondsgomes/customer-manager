@@ -9,8 +9,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CustomerManager.Model\CustomerManager.Model.csproj" />
-    <ProjectReference Include="..\CustomerManager.Repository\CustomerManager.Repository.csproj" />
+    <ProjectReference Include="..\CustomerManager.Model\CustomerManager.Models.csproj" />
+    <ProjectReference Include="..\CustomerManager.Repository\CustomerManager.Repositories.csproj" />
   </ItemGroup>
 
 </Project>
