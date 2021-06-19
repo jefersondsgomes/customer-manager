@@ -3,9 +3,9 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="MongoDB.Driver" Version="2.11.6" />
+    <PackageReference Include="MongoDB.Driver" Version="2.12.4" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CustomerManager.Model\CustomerManager.Models.csproj" />
+    <ProjectReference Include="..\CustomerManager.Models\CustomerManager.Models.csproj" />
   </ItemGroup>
 </Project>
