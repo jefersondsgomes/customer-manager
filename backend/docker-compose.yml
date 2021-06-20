@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  customer-manager-api:
+    image: customer-manager-api
+    container_name: customer-manager-api
+    ports:
+      - 5000:80
+    build:
+      context: .
+      dockerfile: src/CustomerManager.Api/Dockerfile
+  mongo:
+    image: mongo
+    container_name: customer-manager-mongo
+    ports:
+      - 27017:27017
+  mongo-express:
+    image: mongo-express
+    container_name: customer-manager-mongo-express
+    ports:
+      - 8081:8081
+    depends_on:
+      - mongo
