@@ -18,12 +18,12 @@ namespace CustomerManager.Services
     public class AuthenticationService : IAuthenticationService
     {
         private readonly IMongoRepository<User> _userRepository;
-        private readonly IAppSettings _appSettings;
+        private readonly ISettings _settings;
 
-        public AuthenticationService(IMongoRepository<User> userRepository, IAppSettings appSettings)
+        public AuthenticationService(IMongoRepository<User> userRepository, ISettings settings)
         {
             _userRepository = userRepository;
-            _appSettings = appSettings;
+            _settings = settings;
         }
 
         public async Task<Result<AuthenticateResponse>> AuthenticateAsync(AuthenticateRequest authenticateRequest)
@@ -57,7 +57,7 @@ namespace CustomerManager.Services
         private string GenerateJwtToken(User user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+            var key = Encoding.ASCII.GetBytes(_settings.Secret);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[] { new Claim("id", user.Id) }),

@@ -16,10 +16,12 @@ namespace CustomerManager.Repositories
         private readonly IMongoDatabase _database;
         private readonly IMongoCollection<TDocument> _collection;
 
-        public MongoRepository(IMongoSettings settings)
+        private static readonly string _connection = "mongodb://host.docker.internal:27017/?readPreference=primary";
+
+        public MongoRepository()
         {
-            _client = new MongoClient(settings.ConnectionString);
-            _database = _client.GetDatabase(settings.DatabaseName);
+            _client = new MongoClient(_connection);
+            _database = _client.GetDatabase("customermanagerdb");
             _collection = _database.GetCollection<TDocument>(GetCollectionName(typeof(TDocument)));
         }
 

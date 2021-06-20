@@ -2,7 +2,7 @@
 
 namespace CustomerManager.Models.Helpers
 {
-    public class AppSettings : IAppSettings
+    public class Settings : ISettings
     {
         public string Secret { get; set; }
     }

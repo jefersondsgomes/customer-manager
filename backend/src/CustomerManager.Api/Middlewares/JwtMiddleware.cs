@@ -12,13 +12,13 @@ namespace CustomerManager.Api.Middlewares
 {
     public class JwtMiddleware
     {
+        private readonly ISettings _settings;
         private readonly RequestDelegate _next;
-        private readonly IAppSettings _appSettings;
 
-        public JwtMiddleware(RequestDelegate next, IAppSettings appSettings)
+        public JwtMiddleware(ISettings settings, RequestDelegate next)
         {
+            _settings = settings;
             _next = next;
-            _appSettings = appSettings;
         }
 
         public async Task Invoke(HttpContext context, IUserService userService)
@@ -36,7 +36,7 @@ namespace CustomerManager.Api.Middlewares
             try
             {
                 var tokenHandler = new JwtSecurityTokenHandler();
-                var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+                var key = Encoding.ASCII.GetBytes(_settings.Secret);
                 tokenHandler.ValidateToken(token, new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
