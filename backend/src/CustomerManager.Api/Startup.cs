@@ -20,25 +20,20 @@ namespace CustomerManager.Api
     public class Startup
     {
         public IConfiguration Configuration { get; }
-        private readonly IMongoSettings _mongoSettings;
-        private readonly IAppSettings _appSettings;
 
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            _mongoSettings = Configuration.GetSection(nameof(MongoSettings)).Get<MongoSettings>();
-            _appSettings = Configuration.GetSection(nameof(AppSettings)).Get<AppSettings>();
         }
 
         public void ConfigureServices(IServiceCollection services)
         {
             services
-                .AddSingleton(_mongoSettings)
-                .AddSingleton(_appSettings)
+                .AddSingleton<ISettings>(new Settings() { Secret = "kJyyKCh52g2cSYVyc6JGf4h4TEfka2EwkLeLCgCS" })
                 .AddSingleton(typeof(IMongoRepository<>), typeof(MongoRepository<>))
-                .AddScoped<ICustomerService, CustomerService>()
-                .AddScoped<IUserService, UserService>()
-                .AddScoped<IAuthenticationService, AuthenticationService>()
+                .AddSingleton<ICustomerService, CustomerService>()
+                .AddSingleton<IUserService, UserService>()
+                .AddSingleton<IAuthenticationService, AuthenticationService>()
                 .AddControllers();
 
             services.AddSwaggerGen(c =>

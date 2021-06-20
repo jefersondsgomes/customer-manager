@@ -16,20 +16,21 @@ namespace CustomerManager.Tests
     public class AuthenticationUnitTest
     {
         private readonly IMongoRepository<User> _userRepository;
+        private readonly ISettings _settings;
         private readonly IAuthenticationService _authenticationService;
-        private readonly IAppSettings _appSettings;
 
         public AuthenticationUnitTest()
         {
             _userRepository = Substitute.For<IMongoRepository<User>>();
-            _appSettings = Substitute.For<IAppSettings>();
-            _authenticationService = new AuthenticationService(_userRepository, _appSettings);
+            _settings = Substitute.For<ISettings>();
+            _authenticationService = new AuthenticationService(_userRepository, _settings);
+
             Setup();
         }
 
         private void Setup()
         {
-            _appSettings.Secret = "supersecret123456789";
+            _settings.Secret = "supersecret123456789";
         }
 
         [Fact]

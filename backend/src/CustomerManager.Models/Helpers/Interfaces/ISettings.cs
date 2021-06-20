@@ -1,6 +1,6 @@
 ﻿namespace CustomerManager.Models.Helpers.Interfaces
 {
-    public interface IAppSettings
+    public interface ISettings
     {
         string Secret { get; set; }
     }
