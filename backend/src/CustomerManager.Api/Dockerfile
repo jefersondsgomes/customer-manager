@@ -1,6 +1,10 @@
 FROM mcr.microsoft.com/dotnet/aspnet:3.1 AS base
 WORKDIR /app
 
+ENV MongoConnectionString "mongodb://host.docker.internal:27017/?readPreference=primary"
+ENV MongoDatabase "customermanagerdb"
+ENV Secret "kJyyKCh52g2cSYVyc6JGf4h4TEfka2EwkLeLCgCS"
+
 FROM mcr.microsoft.com/dotnet/sdk:3.1 AS build
 WORKDIR /src
 COPY ["src/CustomerManager.Api/CustomerManager.Api.csproj", "src/CustomerManager.Api/"]
