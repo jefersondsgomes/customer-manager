@@ -28,8 +28,13 @@ namespace CustomerManager.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
+            var secret = Environment.GetEnvironmentVariable("Secret");
+            var mongoConnection = Environment.GetEnvironmentVariable("MongoConnectionString");
+            var mongoDatabase = Environment.GetEnvironmentVariable("MongoDatabase");
+
             services
-                .AddSingleton<ISettings>(new Settings() { Secret = "kJyyKCh52g2cSYVyc6JGf4h4TEfka2EwkLeLCgCS" })
+                .AddSingleton<ISettings>(new Settings { Secret = secret })
+                .AddSingleton<IMongoSettings>(new MongoSettings { ConnectionString = mongoConnection, Database = mongoDatabase })
                 .AddSingleton(typeof(IMongoRepository<>), typeof(MongoRepository<>))
                 .AddSingleton<ICustomerService, CustomerService>()
                 .AddSingleton<IUserService, UserService>()
